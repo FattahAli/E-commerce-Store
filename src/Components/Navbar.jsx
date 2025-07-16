@@ -13,7 +13,7 @@ const Navbar = () => {
   ];
   return (
     <nav className="bg-gray-300">
-      <div className="max-w-7xl mx-auto py-4 px-4 flex items-center justify-between">
+      <div className="max-w-[1400px] mx-auto py-4 px-4 flex items-center justify-between">
         <h1 className="text-2xl font-bold">SwiftCart</h1>
         <ul className="hidden md:flex space-x-6">
           {navlinks.map((link) => (
