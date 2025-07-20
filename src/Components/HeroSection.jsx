@@ -1,31 +1,30 @@
 import { ArrowLeft, ArrowRight, Circle } from "lucide-react";
 import { useState } from "react";
 
-const HeroSection = () => {
-  const slides = [
-    {
-      url: "https://images.unsplash.com/photo-1594534475808-b18fc33b045e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      url: "https://plus.unsplash.com/premium_photo-1661645433820-24c8604e4db5?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      url: "https://plus.unsplash.com/premium_photo-1664202526744-516d0dd22932?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-  ];
+const slides = [
+  {
+    url: "https://images.unsplash.com/photo-1594534475808-b18fc33b045e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    tagline: "Shop the Future. Experience Premium.",
+  },
+  {
+    url: "https://plus.unsplash.com/premium_photo-1661645433820-24c8604e4db5?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    tagline: "Unbeatable Deals. Unmatched Quality.",
+  },
+  {
+    url: "https://plus.unsplash.com/premium_photo-1664202526744-516d0dd22932?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    tagline: "Your One-Stop Shop for Everything.",
+  },
+];
 
+const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const prevSlide = () => {
-    const isFirstSlide = currentSlide === 0;
-    const newIndex = isFirstSlide ? slides.length - 1 : currentSlide - 1;
-    setCurrentSlide(newIndex);
+    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   };
 
   const nextSlide = () => {
-    const isLastSlide = currentSlide === slides.length - 1;
-    const newIndex = isLastSlide ? 0 : currentSlide + 1;
-    setCurrentSlide(newIndex);
+    setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
   };
 
   const goToSlide = (slideIndex) => {
@@ -33,30 +32,45 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="max-w-[1400px] h-[800px] m-auto py-8 relative">
+    <div className="relative w-screen h-screen overflow-hidden">
       <div
         style={{ backgroundImage: `url(${slides[currentSlide].url})` }}
-        className="w-full h-full rounded-lg bg-center bg-cover duration-100"
-      ></div>
-      {/* LEft arror */}
-      <div className="absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-[#011627] text-[#2EC4B6] cursor-pointer">
-        {<ArrowLeft onClick={prevSlide} size={30} />}
+        className="absolute inset-0 w-full h-full bg-center bg-cover z-0"
+      >
+        <div className="absolute inset-0 bg-black/60 z-10" />
       </div>
-      {/* right arror */}
-      <div className="absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/2 text-white cursor-pointer">
-        {<ArrowRight onClick={nextSlide} size={30} />}
+      {/* Tagline overlay */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
+        <h1
+          className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-[#ffd700] drop-shadow-lg text-center mb-6 px-4"
+          style={{ letterSpacing: "0.04em" }}
+        >
+          {slides[currentSlide].tagline}
+        </h1>
       </div>
-      <div className="flex justify-center py-4">
-        {slides.map((slide, slideIndex) => (
-          <div
-            key={slideIndex}
-            onClick={() => goToSlide(slideIndex)}
-            className={`cursor-pointer mx-4 ${
-              slideIndex === currentSlide ? "bg-[#2EC4B6] rounded-lg text-transparent" : "bg-gray-200 rounded-full text-transparent"
-            }`}
+      {/* Left arrow */}
+      <div className="absolute top-1/2 left-8 -translate-y-1/2 z-30 cursor-pointer bg-[#181f2e]/80 hover:bg-[#232b3b] p-3 rounded-full border border-[#ffd700] text-[#ffd700]">
+        <ArrowLeft onClick={prevSlide} size={36} />
+      </div>
+      {/* Right arrow */}
+      <div className="absolute top-1/2 right-8 -translate-y-1/2 z-30 cursor-pointer bg-[#181f2e]/80 hover:bg-[#232b3b] p-3 rounded-full border border-[#ffd700] text-[#ffd700]">
+        <ArrowRight onClick={nextSlide} size={36} />
+      </div>
+      {/* Navigation dots */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-4 z-30">
+        {slides.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => goToSlide(idx)}
+            className={`rounded-full border-2 ${
+              idx === currentSlide
+                ? "bg-[#ffd700] border-[#ffd700]"
+                : "bg-[#232b3b] border-[#ffd700]"
+            } w-5 h-5 transition-all`}
+            aria-label={`Go to slide ${idx + 1}`}
           >
-            <Circle size={15} />
-          </div>
+            <span className="sr-only">Go to slide {idx + 1}</span>
+          </button>
         ))}
       </div>
     </div>
