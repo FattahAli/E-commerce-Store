@@ -42,22 +42,23 @@ const HeroSection = () => {
       {/* Tagline overlay */}
       <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
         <h1
-          className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-[#ffd700] drop-shadow-lg text-center mb-6 px-4"
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#ffd700] drop-shadow-lg text-center mb-4 px-4"
           style={{ letterSpacing: "0.04em" }}
         >
           {slides[currentSlide].tagline}
         </h1>
-      </div>
-      {/* Left arrow */}
-      <div className="absolute top-1/2 left-8 -translate-y-1/2 z-30 cursor-pointer bg-[#181f2e]/80 hover:bg-[#232b3b] p-3 rounded-full border border-[#ffd700] text-[#ffd700]">
-        <ArrowLeft onClick={prevSlide} size={36} />
-      </div>
-      {/* Right arrow */}
-      <div className="absolute top-1/2 right-8 -translate-y-1/2 z-30 cursor-pointer bg-[#181f2e]/80 hover:bg-[#232b3b] p-3 rounded-full border border-[#ffd700] text-[#ffd700]">
-        <ArrowRight onClick={nextSlide} size={36} />
+        <button
+          className="mt-2 px-6 py-3 rounded-full bg-[#ffd700] text-[#181f2e] font-bold text-base md:text-lg shadow-lg hover:bg-[#1de9b6] hover:text-[#101624] transition"
+          onClick={() => {
+            const el = document.getElementById("product-list");
+            if (el) el.scrollIntoView({ behavior: "smooth" });
+          }}
+        >
+          Explore our products
+        </button>
       </div>
       {/* Navigation dots */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-4 z-30">
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-2 z-30">
         {slides.map((_, idx) => (
           <button
             key={idx}
@@ -66,7 +67,7 @@ const HeroSection = () => {
               idx === currentSlide
                 ? "bg-[#ffd700] border-[#ffd700]"
                 : "bg-[#232b3b] border-[#ffd700]"
-            } w-5 h-5 transition-all`}
+            } w-2.5 h-2.5 opacity-60 transition-all`}
             aria-label={`Go to slide ${idx + 1}`}
           >
             <span className="sr-only">Go to slide {idx + 1}</span>

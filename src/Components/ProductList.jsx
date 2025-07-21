@@ -12,8 +12,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useState, useCallback } from "react";
-import { Star } from "lucide-react";
+import { Star, MoreVertical } from "lucide-react";
 
 const initialForm = {
   title: "",
@@ -29,8 +35,9 @@ const ProductList = () => {
   const [filter, setFilter] = useState(false);
   const [category, setCategory] = useState("");
   const [showAdd, setShowAdd] = useState(false);
-  const [showEdit, setShowEdit] = useState(null); 
+  const [showEdit, setShowEdit] = useState(null);
   const [form, setForm] = useState(initialForm);
+  const [menuOpenId, setMenuOpenId] = useState(null);
 
   // Add to cart handler with toast
   const handleAddToCart = useCallback(
@@ -41,7 +48,7 @@ const ProductList = () => {
     [addToCart]
   );
 
-  // Add product 
+  // Add product
   const handleAdd = useCallback(() => {
     if (!form.title || !form.price)
       return toast.error("Title and price required");
@@ -58,7 +65,7 @@ const ProductList = () => {
     toast.success("Product added!");
   }, [form, addProduct]);
 
-  // Edit product 
+  // Edit product
   const handleEdit = useCallback(() => {
     if (!form.title || !form.price)
       return toast.error("Title and price required");
@@ -97,12 +104,16 @@ const ProductList = () => {
     [deleteProduct]
   );
 
+  // Dropdown menu handler
+  const handleMenuToggle = (id) => {
+    setMenuOpenId(menuOpenId === id ? null : id);
+  };
+
   // Filtered products
   const filteredProducts = category
     ? products.filter((p) => p.category === category)
     : products;
 
-  
   const renderStars = (rate) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
@@ -156,153 +167,171 @@ const ProductList = () => {
         </div>
       </div>
 
-      {/* Add Product Form */}
-      {showAdd && (
-        <div className="bg-card border border-[#232b3b] rounded-lg p-6 mb-8 max-w-xl mx-auto flex flex-col gap-4">
-          <input
-            className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground"
-            placeholder="Title"
-            value={form.title}
-            onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
-          />
-          <input
-            className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground"
-            placeholder="Price"
-            type="number"
-            value={form.price}
-            onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
-          />
-          <input
-            className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground"
-            placeholder="Image URL"
-            value={form.image}
-            onChange={(e) => setForm((f) => ({ ...f, image: e.target.value }))}
-          />
-          <input
-            className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground"
-            placeholder="Category"
-            value={form.category}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, category: e.target.value }))
-            }
-          />
-          <input
-            className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground"
-            placeholder="Rating (0-5)"
-            type="number"
-            min="0"
-            max="5"
-            value={form.rating.rate}
-            onChange={(e) =>
-              setForm((f) => ({
-                ...f,
-                rating: { ...f.rating, rate: e.target.value },
-              }))
-            }
-          />
-          <input
-            className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground"
-            placeholder="Reviews Count"
-            type="number"
-            min="0"
-            value={form.rating.count}
-            onChange={(e) =>
-              setForm((f) => ({
-                ...f,
-                rating: { ...f.rating, count: e.target.value },
-              }))
-            }
-          />
-          <div className="flex gap-2">
-            <Button onClick={handleAdd} variant="primary">
-              Add
-            </Button>
-            <Button
-              onClick={() => {
-                setShowAdd(false);
-                setForm(initialForm);
-              }}
-              variant="outline"
-            >
-              Cancel
-            </Button>
+      {/* Add Product Dialog */}
+      <Dialog open={showAdd} onOpenChange={setShowAdd}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add Product</DialogTitle>
+          </DialogHeader>
+          <div
+            className="flex flex-col gap-4 w-full max-w-xs sm:max-w-sm mx-auto p-2 sm:p-4 overflow-y-auto"
+            style={{ maxHeight: "70vh" }}
+          >
+            <input
+              className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground w-full"
+              placeholder="Title"
+              value={form.title}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, title: e.target.value }))
+              }
+            />
+            <input
+              className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground w-full"
+              placeholder="Price"
+              type="number"
+              value={form.price}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, price: e.target.value }))
+              }
+            />
+            <input
+              className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground w-full"
+              placeholder="Image URL"
+              value={form.image}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, image: e.target.value }))
+              }
+            />
+            <input
+              className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground w-full"
+              placeholder="Category"
+              value={form.category}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, category: e.target.value }))
+              }
+            />
+            <input
+              className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground w-full"
+              placeholder="Rating (0-5)"
+              type="number"
+              min="0"
+              max="5"
+              value={form.rating.rate}
+              onChange={(e) =>
+                setForm((f) => ({
+                  ...f,
+                  rating: { ...f.rating, rate: e.target.value },
+                }))
+              }
+            />
+            <input
+              className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground w-full"
+              placeholder="Reviews Count"
+              type="number"
+              min="0"
+              value={form.rating.count}
+              onChange={(e) =>
+                setForm((f) => ({
+                  ...f,
+                  rating: { ...f.rating, count: e.target.value },
+                }))
+              }
+            />
+            <div className="flex gap-2 w-full">
+              <Button onClick={handleAdd} variant="primary" className="w-full">
+                Add
+              </Button>
+            </div>
           </div>
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
 
-      {/* Edit Product Form */}
-      {showEdit && (
-        <div className="bg-card border border-[#232b3b] rounded-lg p-6 mb-8 max-w-xl mx-auto flex flex-col gap-4">
-          <input
-            className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground"
-            placeholder="Title"
-            value={form.title}
-            onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
-          />
-          <input
-            className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground"
-            placeholder="Price"
-            type="number"
-            value={form.price}
-            onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
-          />
-          <input
-            className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground"
-            placeholder="Image URL"
-            value={form.image}
-            onChange={(e) => setForm((f) => ({ ...f, image: e.target.value }))}
-          />
-          <input
-            className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground"
-            placeholder="Category"
-            value={form.category}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, category: e.target.value }))
-            }
-          />
-          <input
-            className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground"
-            placeholder="Rating (0-5)"
-            type="number"
-            min="0"
-            max="5"
-            value={form.rating.rate}
-            onChange={(e) =>
-              setForm((f) => ({
-                ...f,
-                rating: { ...f.rating, rate: e.target.value },
-              }))
-            }
-          />
-          <input
-            className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground"
-            placeholder="Reviews Count"
-            type="number"
-            min="0"
-            value={form.rating.count}
-            onChange={(e) =>
-              setForm((f) => ({
-                ...f,
-                rating: { ...f.rating, count: e.target.value },
-              }))
-            }
-          />
-          <div className="flex gap-2">
-            <Button onClick={handleEdit} variant="primary">
-              Save
-            </Button>
-            <Button
-              onClick={() => {
-                setShowEdit(null);
-                setForm(initialForm);
-              }}
-              variant="outline"
-            >
-              Cancel
-            </Button>
+      {/* Edit Product Dialog */}
+      <Dialog
+        open={!!showEdit}
+        onOpenChange={(open) => {
+          if (!open) {
+            setShowEdit(null);
+            setForm(initialForm);
+          }
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Product</DialogTitle>
+          </DialogHeader>
+          <div
+            className="flex flex-col gap-4 w-full max-w-xs sm:max-w-sm mx-auto p-2 sm:p-4 overflow-y-auto"
+            style={{ maxHeight: "70vh" }}
+          >
+            <input
+              className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground w-full"
+              placeholder="Title"
+              value={form.title}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, title: e.target.value }))
+              }
+            />
+            <input
+              className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground w-full"
+              placeholder="Price"
+              type="number"
+              value={form.price}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, price: e.target.value }))
+              }
+            />
+            <input
+              className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground w-full"
+              placeholder="Image URL"
+              value={form.image}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, image: e.target.value }))
+              }
+            />
+            <input
+              className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground w-full"
+              placeholder="Category"
+              value={form.category}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, category: e.target.value }))
+              }
+            />
+            <input
+              className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground w-full"
+              placeholder="Rating (0-5)"
+              type="number"
+              min="0"
+              max="5"
+              value={form.rating.rate}
+              onChange={(e) =>
+                setForm((f) => ({
+                  ...f,
+                  rating: { ...f.rating, rate: e.target.value },
+                }))
+              }
+            />
+            <input
+              className="px-4 py-2 rounded bg-background border border-[#232b3b] text-foreground w-full"
+              placeholder="Reviews Count"
+              type="number"
+              min="0"
+              value={form.rating.count}
+              onChange={(e) =>
+                setForm((f) => ({
+                  ...f,
+                  rating: { ...f.rating, count: e.target.value },
+                }))
+              }
+            />
+            <div className="flex gap-2 w-full">
+              <Button onClick={handleEdit} variant="primary" className="w-full">
+                Save
+              </Button>
+            </div>
           </div>
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
 
       {/* Category filter options */}
       {filter && (
@@ -323,66 +352,92 @@ const ProductList = () => {
       )}
 
       {/* Product grid */}
-      <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 px-2 sm:px-4 lg:px-8 max-w-7xl mx-auto mb-12 w-full">
+      <div
+        id="product-list"
+        className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 px-2 sm:px-4 lg:px-8 max-w-7xl mx-auto mb-12 w-full"
+      >
         {filteredProducts.map((product) => (
           <Card
             key={product.id}
-            className="flex flex-col items-center hover:shadow-lg hover:shadow-[#ffd700]/30 transition duration-300 bg-card border border-[#232b3b] w-full min-w-0"
+            className="flex flex-col items-center hover:shadow-lg hover:shadow-[#ffd700]/30 transition duration-300 bg-white text-[#181f2e] border border-[#e5e7eb] w-full min-w-0"
           >
-            <Link to={`/products/${product.id}`} className="w-full">
-              <CardHeader className="flex justify-center">
-                <img
-                  src={product.image}
-                  alt={`Product: ${product.title}`}
-                  className="w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-52 lg:h-52 object-contain mx-auto rounded-lg"
-                />
-              </CardHeader>
-
-              <CardTitle
-                className="text-[#ffd700] text-center text-base sm:text-lg md:text-xl font-semibold px-2 py-2 leading-tight truncate w-full"
-                title={product.title}
-              >
-                {product.title}
-              </CardTitle>
-
-              <CardContent className="flex flex-col gap-2 px-2 sm:px-4 pb-4 text-sm sm:text-base text-gray-300 w-full">
-                <p className="truncate" title={product.price}>
-                  Price: ${product.price}
-                </p>
-                <div className="flex items-center gap-2 flex-wrap">
-                  {renderStars(product.rating?.rate || 0)}
-                  <span className="ml-1 text-xs sm:text-sm text-gray-400">
-                    {product.rating?.rate ? `${product.rating?.rate}` : ""}
-                    {product.rating?.count
-                      ? ` (${product.rating?.count} reviews)`
-                      : ""}
-                  </span>
+            <div className="relative w-full">
+              <Link to={`/products/${product.id}`} className="w-full block">
+                <CardHeader className="flex justify-center bg-white">
+                  <img
+                    src={product.image}
+                    alt={`Product: ${product.title}`}
+                    className="w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-52 lg:h-52 object-contain mx-auto rounded-lg"
+                  />
+                </CardHeader>
+                {/* 3-dots menu icon overlay */}
+                <button
+                  type="button"
+                  className="absolute top-2 right-2 z-10 p-1 rounded-full hover:bg-gray-100 focus:outline-none"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleMenuToggle(product.id);
+                  }}
+                >
+                  <MoreVertical size={22} />
+                </button>
+              </Link>
+              {/* Dropdown menu */}
+              {menuOpenId === product.id && (
+                <div className="absolute top-10 right-2 z-20 bg-white border border-gray-200 rounded shadow-md min-w-[120px] flex flex-col">
+                  <button
+                    className="px-4 py-2 text-left hover:bg-gray-100 text-[#181f2e]"
+                    onClick={() => {
+                      startEdit(product);
+                      setMenuOpenId(null);
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="px-4 py-2 text-left hover:bg-gray-100 text-[#e53935]"
+                    onClick={() => {
+                      handleDelete(product.id);
+                      setMenuOpenId(null);
+                    }}
+                  >
+                    Delete
+                  </button>
                 </div>
-              </CardContent>
-            </Link>
-            <CardFooter className="flex flex-col sm:flex-row gap-2 w-full justify-between items-center px-2 sm:px-4 pb-2">
+              )}
+            </div>
+            <CardTitle
+              className="text-[#181f2e] text-center text-base sm:text-lg md:text-xl font-semibold px-2 py-2 leading-tight truncate w-full"
+              title={product.title}
+            >
+              {product.title}
+            </CardTitle>
+            <CardContent className="flex flex-col gap-2 px-2 sm:px-4 pb-4 text-sm sm:text-base text-[#181f2e] w-full">
+              <p className="truncate" title={product.price}>
+                Price: ${product.price}
+              </p>
+              <div className="flex items-center gap-2 flex-wrap">
+                {renderStars(product.rating?.rate || 0)}
+                <span className="ml-1 text-xs sm:text-sm text-[#181f2e]">
+                  {product.rating?.rate ? `${product.rating?.rate}` : ""}
+                  {product.rating?.count
+                    ? ` (${product.rating?.count} reviews)`
+                    : ""}
+                </span>
+              </div>
+            </CardContent>
+            {/* Add to Cart Button */}
+            <div className="w-full px-2 sm:px-4 pb-4">
               <Button
                 variant="outline"
                 onClick={() => handleAddToCart(product)}
-                className="w-full sm:w-auto"
+                className="w-full text-[#ffd700]"
               >
                 Add to cart
               </Button>
-              <Button
-                variant="secondary"
-                onClick={() => startEdit(product)}
-                className="w-full sm:w-auto"
-              >
-                Edit
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={() => handleDelete(product.id)}
-                className="w-full sm:w-auto"
-              >
-                Delete
-              </Button>
-            </CardFooter>
+            </div>
+            <CardFooter className="hidden" />
           </Card>
         ))}
       </div>

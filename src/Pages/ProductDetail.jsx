@@ -52,54 +52,43 @@ const ProductDetail = () => {
     return <p className="text-center mt-10 text-gray-300">Loading...</p>;
 
   return (
-    <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-8 py-6 md:py-10 min-h-screen flex flex-col items-center justify-center bg-background text-foreground w-full">
-      <div className="flex flex-col lg:flex-row gap-8 md:gap-12 items-center w-full">
-        {/* Left: Product Image */}
-        <div className="w-full lg:w-1/2 flex justify-center mb-8 lg:mb-0">
+    <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-8 py-6 md:py-10 min-h-screen flex items-center justify-center bg-background text-foreground w-full">
+      <div className="flex flex-col lg:flex-row gap-8 md:gap-12 w-full">
+        {/* Left: Product Image*/}
+        <div className="w-full lg:w-1/2 flex justify-center items-center bg-white rounded-xl shadow-md p-6 mb-8 lg:mb-0">
           <img
             src={product.image}
             alt={`Product ${id}`}
-            className="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-[400px] lg:h-[400px] object-contain rounded-xl shadow-md bg-card max-w-full"
+            className="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-[400px] lg:h-[400px] object-contain max-w-full"
           />
         </div>
-
         {/* Right: Product Details */}
-        <Card className="w-full max-w-xl lg:w-1/2 bg-card border border-[#232b3b] flex flex-col">
-          <CardHeader>
-            <CardTitle
-              className="text-xl sm:text-2xl md:text-3xl text-[#ffd700] truncate"
-              title={product.title}
-            >
-              {product.title}
-            </CardTitle>
-            <CardDescription className="text-base sm:text-lg text-gray-300">
-              ${product.price}
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent className="space-y-4">
-            <p className="text-gray-200 text-sm sm:text-base leading-relaxed break-words">
-              {product.description}
-            </p>
-            <div className="flex items-center gap-2 flex-wrap">
-              {renderStars(product.rating?.rate || 0)}
-              <span className="ml-1 text-xs sm:text-sm text-gray-400">
-                {product.rating?.rate ? `${product.rating?.rate}/5` : ""}
-                {product.rating?.count
-                  ? `, ${product.rating?.count} reviews`
-                  : ""}
-              </span>
-            </div>
-          </CardContent>
-          <CardFooter className="mt-4">
-            <Button
-              onClick={handleAddToCart}
-              className="w-full py-3 text-lg font-bold bg-[#ffd700] text-[#101624] hover:bg-[#1de9b6] hover:text-[#101624] transition"
-            >
-              Add to Cart
-            </Button>
-          </CardFooter>
-        </Card>
+        <div className="w-full max-w-xl lg:w-1/2 flex flex-col justify-center">
+          <h1 className="text-xl sm:text-2xl md:text-3xl text-[#ffd700] font-bold mb-4 break-words">
+            {product.title}
+          </h1>
+          <div className="text-base sm:text-lg text-gray-300 mb-4">
+            ${product.price}
+          </div>
+          <p className="text-gray-200 text-sm sm:text-base leading-relaxed break-words mb-4">
+            {product.description}
+          </p>
+          <div className="flex items-center gap-2 flex-wrap mb-6">
+            {renderStars(product.rating?.rate || 0)}
+            <span className="ml-1 text-xs sm:text-sm text-gray-400">
+              {product.rating?.rate ? `${product.rating?.rate}` : ""}
+              {product.rating?.count
+                ? ` (${product.rating?.count} reviews)`
+                : ""}
+            </span>
+          </div>
+          <Button
+            onClick={handleAddToCart}
+            className="w-full py-3 text-lg font-bold bg-[#ffd700] text-[#101624] hover:bg-[#1de9b6] hover:text-[#101624] transition"
+          >
+            Add to Cart
+          </Button>
+        </div>
       </div>
     </div>
   );

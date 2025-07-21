@@ -13,7 +13,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const CheckoutPage = () => {
-  const { items } = useCart();
+  const { items, clearCart } = useCart();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -31,6 +31,9 @@ const CheckoutPage = () => {
       address: "",
       city: "",
       zip: "",
+      cardNumber: "",
+      expiry: "",
+      cvv: "",
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
@@ -38,8 +41,18 @@ const CheckoutPage = () => {
       address: Yup.string().required("Required"),
       city: Yup.string().required("Required"),
       zip: Yup.string().required("Required"),
+      cardNumber: Yup.string()
+        .required("Required")
+        .matches(/^\d{16}$/, "Card number must be 16 digits"),
+      expiry: Yup.string()
+        .required("Required")
+        .matches(/^(0[1-9]|1[0-2])\/(\d{2})$/, "Expiry must be MM/YY"),
+      cvv: Yup.string()
+        .required("Required")
+        .matches(/^\d{3,4}$/, "CVV must be 3 or 4 digits"),
     }),
     onSubmit: (values) => {
+      clearCart();
       setOpen(true);
     },
   });
@@ -130,6 +143,64 @@ const CheckoutPage = () => {
               {formik.touched.zip && formik.errors.zip && (
                 <div className="text-red-400 text-xs sm:text-sm">
                   {formik.errors.zip}
+                </div>
+              )}
+            </div>
+          </div>
+          {/* Credit Card Fields */}
+          <div>
+            <label className="block mb-1 font-medium">Card Number</label>
+            <input
+              name="cardNumber"
+              type="text"
+              maxLength={16}
+              inputMode="numeric"
+              placeholder="1234 5678 9012 3456"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.cardNumber}
+              className="w-full border border-[#232b3b] rounded px-3 py-2 bg-card text-foreground text-sm sm:text-base"
+            />
+            {formik.touched.cardNumber && formik.errors.cardNumber && (
+              <div className="text-red-400 text-xs sm:text-sm">
+                {formik.errors.cardNumber}
+              </div>
+            )}
+          </div>
+          <div className="flex gap-4">
+            <div className="flex-1">
+              <label className="block mb-1 font-medium">Expiry (MM/YY)</label>
+              <input
+                name="expiry"
+                type="text"
+                maxLength={5}
+                placeholder="MM/YY"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.expiry}
+                className="w-full border border-[#232b3b] rounded px-3 py-2 bg-card text-foreground text-sm sm:text-base"
+              />
+              {formik.touched.expiry && formik.errors.expiry && (
+                <div className="text-red-400 text-xs sm:text-sm">
+                  {formik.errors.expiry}
+                </div>
+              )}
+            </div>
+            <div className="flex-1">
+              <label className="block mb-1 font-medium">CVV</label>
+              <input
+                name="cvv"
+                type="password"
+                maxLength={4}
+                placeholder="CVV"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.cvv}
+                className="w-full border border-[#232b3b] rounded px-3 py-2 bg-card text-foreground text-sm sm:text-base"
+              />
+              {formik.touched.cvv && formik.errors.cvv && (
+                <div className="text-red-400 text-xs sm:text-sm">
+                  {formik.errors.cvv}
                 </div>
               )}
             </div>
