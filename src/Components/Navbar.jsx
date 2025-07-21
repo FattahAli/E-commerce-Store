@@ -143,9 +143,7 @@ const Navbar = () => {
             onChange={(e) => setSearch(e.target.value)}
             className="w-full mb-2 bg-[#232b3b] text-[#f5f7fa] border-[#232b3b]"
           />
-          <Button className="w-full mb-2" variant="outline">
-            Search
-          </Button>
+          
           {search && filteredProducts?.length > 0 && (
             <div className="bg-[#232b3b] border rounded shadow-md max-h-60 overflow-y-auto">
               {filteredProducts.slice(0, 5).map((product) => (
