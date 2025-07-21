@@ -32,7 +32,7 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden">
+    <div className="relative h-screen overflow-hidden">
       <div
         style={{ backgroundImage: `url(${slides[currentSlide].url})` }}
         className="absolute inset-0 w-full h-full bg-center bg-cover z-0"
