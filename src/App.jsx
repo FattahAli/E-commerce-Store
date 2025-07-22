@@ -22,7 +22,12 @@ const App = () => {
           <Route path="/contact" element={<ContactUs />} />
         </Routes>
       </Router>
-      <Toaster position="top-right" richColors />
+      <Toaster
+        position="top-right"
+        richColors
+        duration={1000}
+        visibleToasts={2}
+      />
     </div>
   );
 };

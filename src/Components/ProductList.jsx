@@ -135,35 +135,39 @@ const ProductList = () => {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 max-w-7xl mx-auto w-full">
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold">
-          Our Products
-        </h2>
-        <div className="flex flex-wrap gap-2 max-w-full">
-          <Button
-            variant="secondary"
-            onClick={() => setShowAdd((v) => !v)}
-            className="whitespace-nowrap"
-          >
-            + Add Product
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => setFilter(!filter)}
-            className="whitespace-nowrap"
-          >
-            Filter by Categories
-          </Button>
-          {/* Men category button if present */}
-          {products.some((p) => (p.category || "").toLowerCase() === "men") && (
+      <div className="max-w-7xl mx-auto w-full px-2 sm:px-4 lg:px-8 mb-8">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 w-full">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold">
+            Our Products
+          </h2>
+          <div className="flex flex-wrap gap-2 max-w-full">
             <Button
-              variant={category === "men" ? "default" : "outline"}
-              onClick={() => setCategory(category === "men" ? "" : "men")}
+              variant="secondary"
+              onClick={() => setShowAdd((v) => !v)}
               className="whitespace-nowrap"
             >
-              Men
+              + Add Product
             </Button>
-          )}
+            <Button
+              variant="outline"
+              onClick={() => setFilter(!filter)}
+              className="whitespace-nowrap"
+            >
+              Filter by Categories
+            </Button>
+            {/* Men category button if present */}
+            {products.some(
+              (p) => (p.category || "").toLowerCase() === "men"
+            ) && (
+              <Button
+                variant={category === "men" ? "default" : "outline"}
+                onClick={() => setCategory(category === "men" ? "" : "men")}
+                className="whitespace-nowrap"
+              >
+                Men
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -408,14 +412,14 @@ const ProductList = () => {
               )}
             </div>
             <CardTitle
-              className="text-[#181f2e] text-center text-base sm:text-lg md:text-xl font-semibold px-2 py-2 leading-tight truncate w-full"
+              className="text-[#181f2e] text-left text-base sm:text-lg md:text-xl font-semibold px-2 sm:px-4 py-2 leading-relaxed w-full line-clamp-2 overflow-hidden"
               title={product.title}
             >
               {product.title}
             </CardTitle>
             <CardContent className="flex flex-col gap-2 px-2 sm:px-4 pb-4 text-sm sm:text-base text-[#181f2e] w-full">
-              <p className="truncate" title={product.price}>
-                Price: ${product.price}
+              <p className="truncate text-xl font-bold" title={product.price}>
+                ${product.price}
               </p>
               <div className="flex items-center gap-2 flex-wrap">
                 {renderStars(product.rating?.rate || 0)}
