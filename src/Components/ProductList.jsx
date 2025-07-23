@@ -363,7 +363,7 @@ const ProductList = () => {
         {filteredProducts.map((product) => (
           <Card
             key={product.id}
-            className="flex flex-col items-center hover:shadow-lg hover:shadow-[#ffd700]/30 transition duration-300 bg-white text-[#181f2e] border border-[#e5e7eb] w-full min-w-0"
+            className="flex flex-col justify-between items-center hover:shadow-lg hover:shadow-[#ffd700]/30 transition duration-300 bg-white text-[#181f2e] border border-[#e5e7eb] w-full min-w-0 h-full min-h-[420px]"
           >
             <div className="relative w-full">
               <Link to={`/products/${product.id}`} className="w-full block">
@@ -417,7 +417,7 @@ const ProductList = () => {
             >
               {product.title}
             </CardTitle>
-            <CardContent className="flex flex-col gap-2 px-2 sm:px-4 pb-4 text-sm sm:text-base text-[#181f2e] w-full">
+            <CardContent className="flex flex-col gap-2 px-2 sm:px-4 pb-4 text-sm sm:text-base text-[#181f2e] w-full flex-1">
               <p className="truncate text-xl font-bold" title={product.price}>
                 ${product.price}
               </p>
@@ -432,7 +432,7 @@ const ProductList = () => {
               </div>
             </CardContent>
             {/* Add to Cart Button */}
-            <div className="w-full px-2 sm:px-4 pb-4">
+            <div className="w-full px-2 sm:px-4 pb-4 mt-auto">
               <Button
                 variant="outline"
                 onClick={() => handleAddToCart(product)}
