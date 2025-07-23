@@ -411,23 +411,29 @@ const ProductList = () => {
                 </div>
               )}
             </div>
-            <CardTitle
-              className="text-[#181f2e] text-left text-base sm:text-lg md:text-xl font-semibold px-2 sm:px-4 py-2 leading-relaxed w-full line-clamp-2 overflow-hidden"
-              title={product.title}
-            >
-              {product.title}
-            </CardTitle>
-            <CardContent className="flex flex-col gap-2 px-2 sm:px-4 pb-4 text-sm sm:text-base text-[#181f2e] w-full flex-1">
-              <p className="truncate text-xl font-bold" title={product.price}>
-                ${product.price}
-              </p>
-              <div className="flex items-center gap-2 flex-wrap">
-                {renderStars(product.rating?.rate || 0)}
-                <span className="ml-1 text-xs sm:text-sm text-[#181f2e]">
-                  {product.rating?.rate ? `${product.rating?.rate}` : ""}
-                  {product.rating?.count
-                    ? ` (${product.rating?.count} reviews)`
-                    : ""}
+
+            <CardContent className="flex flex-col gap-2 px-2 sm:px-4 pb-4 text-sm sm:text-base text-[#181f2e] w-full flex-1 justify-between">
+              <CardTitle
+                className="text-[#181f2e] text-left text-base sm:text-lg md:text-xl font-semibold px-0 py-2 leading-relaxed w-full line-clamp-2 overflow-hidden"
+                title={product.title}
+              >
+                {product.title}
+              </CardTitle>
+              <div className="flex items-center justify-between w-full min-h-[28px]">
+                <span
+                  className="truncate text-lg font-bold px-0"
+                  title={product.price}
+                >
+                  ${product.price}
+                </span>
+                <span className="flex items-center gap-2">
+                  {renderStars(product.rating?.rate || 0)}
+                  <span className="ml-1 text-xs sm:text-sm text-[#181f2e]">
+                    {product.rating?.rate ? `${product.rating?.rate}` : ""}
+                    {product.rating?.count
+                      ? ` (${product.rating?.count} reviews)`
+                      : ""}
+                  </span>
                 </span>
               </div>
             </CardContent>
