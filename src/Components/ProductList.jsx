@@ -419,9 +419,10 @@ const ProductList = () => {
               >
                 {product.title}
               </CardTitle>
-              <div className="flex items-center justify-between w-full min-h-[28px]">
+              
+              <div className="flex flex-col items-start w-full min-h-[28px] gap-1">
                 <span
-                  className="truncate text-lg font-bold px-0"
+                  className="text-xl font-bold px-0 text-[#101624]"
                   title={product.price}
                 >
                   ${product.price}
@@ -438,7 +439,7 @@ const ProductList = () => {
               </div>
             </CardContent>
             {/* Add to Cart Button */}
-            <div className="w-full px-2 sm:px-4 pb-4 mt-auto">
+            <div className="w-full px-2 sm:px-4 pb-2 mt-2">
               <Button
                 variant="outline"
                 onClick={() => handleAddToCart(product)}
